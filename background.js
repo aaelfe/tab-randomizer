@@ -3,21 +3,24 @@ async function queryTabs() {
 }
 
 let tabs
-let tabIds=[]
-queryTabs()
-  .then((t) => tabs=t)
+queryTabs().then((t) => tabs=t)
 
-chrome.alarms.create({periodInMinutes: 0.001})
-
-chrome.alarms.onAlarm.addListener(() => {
-  moveRandomTab()
-})
-
-function moveRandomTab() {
-  let tabId=Math.floor(Math.random()*(tabs.length-1))
+function moveTabToRandomIndex(tabIndex) {
   let index=Math.floor(Math.random()*(tabs.length-1))
   chrome.tabs.move(
-    tabs[tabId].id,
+    tabs[tabIndex].id,
     {'index': index},
   )
 }
+
+function rearrangeTabs() {
+  for(let i=0; i<tabs.length; i++) {
+    moveTabToRandomIndex(i)
+  }
+}
+
+chrome.alarms.create({periodInMinutes: 5})
+
+chrome.alarms.onAlarm.addListener(() => {
+  rearrangeTabs()
+})
