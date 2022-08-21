@@ -3,7 +3,6 @@ async function queryTabs() {
 }
 
 let tabs
-queryTabs().then((t) => tabs=t)
 
 function moveTabToRandomIndex(tabIndex) {
   let index=Math.floor(Math.random()*(tabs.length-1))
@@ -22,5 +21,6 @@ function rearrangeTabs() {
 chrome.alarms.create({periodInMinutes: 5})
 
 chrome.alarms.onAlarm.addListener(() => {
+  queryTabs().then((t) => tabs=t)
   rearrangeTabs()
 })
